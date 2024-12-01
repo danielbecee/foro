@@ -29,6 +29,7 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Preguntas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -71,7 +72,6 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Barra lateral -->
     <div class="sidebar">
         <div class="p-3">
-            <!-- Navegación principal -->
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="./index.php" class="nav-link">
@@ -89,8 +89,8 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./saves.php" class="nav-link">
-                        <i class="bi bi-bookmark me-2"></i> Saves
+                    <a href="mis_preguntas.php" class="nav-link">
+                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
                     </a>
                 </li>
                 <li class="nav-item">
@@ -111,7 +111,29 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <small class="text-muted">Publicado el <?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
                     <div class="mt-3">
                         <a href="editar_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="eliminar_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta pregunta?')">Eliminar</a>
+                        <!-- Botón para abrir el modal -->
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $pregunta['id'] ?>">
+                            Eliminar
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalEliminar<?= $pregunta['id'] ?>" tabindex="-1" aria-labelledby="modalEliminarLabel<?= $pregunta['id'] ?>" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalEliminarLabel<?= $pregunta['id'] ?>">Confirmar Eliminación</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas eliminar esta pregunta? Esta acción no se puede deshacer.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <a href="eliminar_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-danger">Eliminar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -119,5 +141,7 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p>No has publicado preguntas todavía.</p>
         <?php endif; ?>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

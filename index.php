@@ -72,13 +72,13 @@ $preguntas = obtenerPreguntas($pdo);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="mis_preguntas.php" class="nav-link">
-                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
+                    <a href="./tags.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Tags
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./saves.php" class="nav-link">
-                        <i class="bi bi-bookmark me-2"></i> Saves
+                    <a href="mis_preguntas.php" class="nav-link">
+                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
                     </a>
                 </li>
                 <li class="nav-item">

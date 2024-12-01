@@ -14,6 +14,7 @@ $preguntas = obtenerPreguntas($pdo); // Obtener todas las preguntas
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preguntas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -74,8 +75,8 @@ $preguntas = obtenerPreguntas($pdo); // Obtener todas las preguntas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./saves.php" class="nav-link">
-                        <i class="bi bi-bookmark me-2"></i> Saves
+                    <a href="mis_preguntas.php" class="nav-link">
+                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
                     </a>
                 </li>
                 <li class="nav-item">
