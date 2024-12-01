@@ -1,26 +1,38 @@
 <?php
-session_start(); // Asegurarse de que la sesión esté activa
+session_start();
 $userLoggedIn = isset($_SESSION['user_id']); // Verificar si el usuario está autenticado
-require './logic/get_pregunta.php'; // Archivo que contiene la lógica de las preguntas
-// Obtener detalles de la pregunta
-$preguntas = obtenerPreguntas($pdo);
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ./views/login.php');
+    exit;
+}
+
+require './db/conexion.php';
+
+// Obtener las preguntas del usuario autenticado
+$user_id = $_SESSION['user_id'];
+
+$query = "
+    SELECT id, title, description, created_at
+    FROM questions
+    WHERE user_id = ?
+    ORDER BY created_at DESC
+";
+$stmt = $pdo->prepare($query);
+$stmt->execute([$user_id]);
+$preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StackOverflow Clone</title>
-    <!-- Bootstrap CSS -->
+    <title>Mis Preguntas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-    <!-- Barra de Navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="./index.php">StackOverflow Clone</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,8 +84,8 @@ $preguntas = obtenerPreguntas($pdo);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="mis_preguntas.php" class="nav-link">
-                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
+                    <a href="./tags.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Tags
                     </a>
                 </li>
                 <li class="nav-item">
@@ -89,42 +101,23 @@ $preguntas = obtenerPreguntas($pdo);
             </ul>
         </div>
     </div>
-
-    <!-- Contenedor Principal -->
     <div class="container mt-5">
-        <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Preguntas Recientes</h1>
-            <a href="add_pregunta.php" class="btn btn-primary">Añadir Pregunta</a>
-
-        </div>
-
-        <!-- Lista de Preguntas -->
-        <?php foreach ($preguntas as $pregunta): ?>
-            <div class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <h5 class="mb-1"><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
-                    <small><?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
+        <h1 class="h3 mb-4">Mis Preguntas</h1>
+        <?php if ($preguntas): ?>
+            <?php foreach ($preguntas as $pregunta): ?>
+                <div class="list-group-item">
+                    <h5><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
+                    <p><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
+                    <small class="text-muted">Publicado el <?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
+                    <div class="mt-3">
+                        <a href="editar_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="eliminar_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta pregunta?')">Eliminar</a>
+                    </div>
                 </div>
-                <p class="mb-1"><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
-                <small class="text-muted">Publicado por: <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
-                <!-- Botón para ver detalles y responder -->
-                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-primary btn-sm mt-2">Responder</a>
-            </div>
-        <?php endforeach; ?>
-
-
-
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No has publicado preguntas todavía.</p>
+        <?php endif; ?>
     </div>
-
-
-    <!-- Pie de Página -->
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>StackOverflow Clone © 2024. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

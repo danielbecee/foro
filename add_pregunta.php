@@ -1,9 +1,6 @@
 <?php
 session_start(); // Asegurarse de que la sesión esté activa
 $userLoggedIn = isset($_SESSION['user_id']); // Verificar si el usuario está autenticado
-require './logic/get_pregunta.php'; // Archivo que contiene la lógica de las preguntas
-// Obtener detalles de la pregunta
-$preguntas = obtenerPreguntas($pdo);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -67,13 +64,13 @@ $preguntas = obtenerPreguntas($pdo);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="preguntas.php" class="nav-link">
+                    <a href="./questions.php" class="nav-link">
                         <i class="bi bi-question-circle me-2"></i> Questions
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="mis_preguntas.php" class="nav-link">
-                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
+                    <a href="./tags.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Tags
                     </a>
                 </li>
                 <li class="nav-item">
@@ -90,31 +87,20 @@ $preguntas = obtenerPreguntas($pdo);
         </div>
     </div>
 
-    <!-- Contenedor Principal -->
     <div class="container mt-5">
-        <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Preguntas Recientes</h1>
-            <a href="add_pregunta.php" class="btn btn-primary">Añadir Pregunta</a>
-
-        </div>
-
-        <!-- Lista de Preguntas -->
-        <?php foreach ($preguntas as $pregunta): ?>
-            <div class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <h5 class="mb-1"><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
-                    <small><?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
-                </div>
-                <p class="mb-1"><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
-                <small class="text-muted">Publicado por: <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
-                <!-- Botón para ver detalles y responder -->
-                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-primary btn-sm mt-2">Responder</a>
+        <h2 class="h4 mb-4">Hacer una Pregunta</h2>
+        <form method="POST" action="./logic/crear_pregunta.php">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input type="text" class="form-control" name="title" id="title" placeholder="Escribe un título claro y conciso">
             </div>
-        <?php endforeach; ?>
-
-
-
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" name="description" rows="5" placeholder="Describe tu problema con detalles"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publicar Pregunta</button>
+        </form>
+    </div>
     </div>
 
 

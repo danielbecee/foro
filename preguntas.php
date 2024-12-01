@@ -1,26 +1,23 @@
 <?php
-session_start(); // Asegurarse de que la sesión esté activa
+session_start();
 $userLoggedIn = isset($_SESSION['user_id']); // Verificar si el usuario está autenticado
-require './logic/get_pregunta.php'; // Archivo que contiene la lógica de las preguntas
-// Obtener detalles de la pregunta
-$preguntas = obtenerPreguntas($pdo);
+
+require './logic/get_pregunta.php';
+
+$preguntas = obtenerPreguntas($pdo); // Obtener todas las preguntas
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StackOverflow Clone</title>
-    <!-- Bootstrap CSS -->
+    <title>Preguntas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-    <!-- Barra de Navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="./index.php">StackOverflow Clone</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,8 +69,8 @@ $preguntas = obtenerPreguntas($pdo);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="mis_preguntas.php" class="nav-link">
-                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
+                    <a href="./tags.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Tags
                     </a>
                 </li>
                 <li class="nav-item">
@@ -89,42 +86,15 @@ $preguntas = obtenerPreguntas($pdo);
             </ul>
         </div>
     </div>
-
-    <!-- Contenedor Principal -->
     <div class="container mt-5">
-        <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Preguntas Recientes</h1>
-            <a href="add_pregunta.php" class="btn btn-primary">Añadir Pregunta</a>
-
-        </div>
-
-        <!-- Lista de Preguntas -->
+        <h1 class="h3 mb-4">Todas las Preguntas</h1>
         <?php foreach ($preguntas as $pregunta): ?>
             <div class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <h5 class="mb-1"><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
-                    <small><?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
-                </div>
-                <p class="mb-1"><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
-                <small class="text-muted">Publicado por: <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
-                <!-- Botón para ver detalles y responder -->
-                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-primary btn-sm mt-2">Responder</a>
+                <h5><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
+                <small>Publicado por <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
+                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-sm btn-primary mt-2">Ver Pregunta</a>
             </div>
         <?php endforeach; ?>
-
-
-
     </div>
-
-
-    <!-- Pie de Página -->
-    <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p>StackOverflow Clone © 2024. Todos los derechos reservados.</p>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

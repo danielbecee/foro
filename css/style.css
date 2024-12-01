@@ -1,0 +1,38 @@
+
+
+/* Estilo para la barra lateral */
+.sidebar {
+    height: 100vh;
+    /* Ocupa toda la altura de la pantalla */
+    background-color: #f8f9fa;
+    /* Color de fondo claro */
+    border-right: 1px solid #dee2e6;
+    /* Borde derecho */
+    position: fixed;
+    /* Fija la barra en su posición */
+    width: 240px;
+    /* Ancho fijo de la barra */
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #495057;
+    /* Color del texto */
+    font-size: 16px;
+    /* Tamaño del texto */
+}
+
+.sidebar a:hover {
+    background-color: #e9ecef;
+    /* Fondo al pasar el ratón */
+    color: #000;
+    /* Color del texto al pasar el ratón */
+}
+
+.sidebar .section-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #6c757d;
+    margin: 20px 15px 10px;
+    text-transform: uppercase;
+}
