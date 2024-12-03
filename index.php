@@ -1,8 +1,7 @@
 <?php
-session_start(); // Asegurarse de que la sesión esté activa
-$userLoggedIn = isset($_SESSION['user_id']); // Verificar si el usuario está autenticado
-require './logic/get_pregunta.php'; // Archivo que contiene la lógica de las preguntas
-// Obtener detalles de la pregunta
+session_start();
+$userLoggedIn = isset($_SESSION['user_id']);
+require './logic/get_pregunta.php';
 $preguntas = obtenerPreguntas($pdo);
 ?>
 <!DOCTYPE html>
@@ -27,13 +26,8 @@ $preguntas = obtenerPreguntas($pdo);
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form class="d-flex me-auto" action="./search.php" method="GET">
-                    <input
-                        class="form-control me-2"
-                        type="search"
-                        name="query"
-                        placeholder="Buscar preguntas..."
-                        aria-label="Buscar">
+                <form class="d-flex me-auto" action="./logic/buscar.php" method="GET">
+                    <input class="form-control me-2" type="search" name="query" placeholder="Buscar preguntas..." aria-label="Buscar">
                     <button class="btn btn-outline-success" type="submit">Buscar</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
@@ -56,67 +50,68 @@ $preguntas = obtenerPreguntas($pdo);
             </div>
         </div>
     </nav>
-    <!-- Barra lateral -->
-    <div class="sidebar">
-        <div class="p-3">
-            <!-- Navegación principal -->
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a href="./index.php" class="nav-link">
-                        <i class="bi bi-house-door me-2"></i> Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="preguntas.php" class="nav-link">
-                        <i class="bi bi-question-circle me-2"></i> Questions
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="./tags.php" class="nav-link">
-                        <i class="bi bi-tags me-2"></i> Tags
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="mis_preguntas.php" class="nav-link">
-                        <i class="bi bi-list-task me-2"></i> Mis Preguntas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="./users.php" class="nav-link">
-                        <i class="bi bi-people me-2"></i> Users
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
 
-    <!-- Contenedor Principal -->
-    <div class="container mt-5">
-        <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Preguntas Recientes</h1>
-            <a href="add_pregunta.php" class="btn btn-primary">Añadir Pregunta</a>
-
-        </div>
-
-        <!-- Lista de Preguntas -->
-        <?php foreach ($preguntas as $pregunta): ?>
-            <div class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <h5 class="mb-1"><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
-                    <small><?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Barra lateral -->
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a href="./index.php" class="nav-link">
+                                <i class="bi bi-house-door me-2"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="preguntas.php" class="nav-link">
+                                <i class="bi bi-question-circle me-2"></i> Questions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./mis_respuestas.php" class="nav-link">
+                                <i class="bi bi-tags me-2"></i> Mis Respuestas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="mis_preguntas.php" class="nav-link">
+                                <i class="bi bi-list-task me-2"></i> Mis Preguntas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="./users.php" class="nav-link">
+                                <i class="bi bi-people me-2"></i> Users
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <p class="mb-1"><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
-                <small class="text-muted">Publicado por: <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
-                <!-- Botón para ver detalles y responder -->
-                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-primary btn-sm mt-2">Responder</a>
-            </div>
-        <?php endforeach; ?>
+            </nav>
 
+            <!-- Contenido principal -->
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="d-flex justify-content-between align-items-center mt-4 mb-4">
+                    <h1 class="h3">Preguntas Recientes</h1>
+                    <a href="add_pregunta.php" class="btn btn-primary">Añadir Pregunta</a>
+                </div>
 
-
+                <!-- Lista de Preguntas -->
+                <div class="list-group">
+                    <?php foreach ($preguntas as $pregunta): ?>
+                        <div class="list-group-item list-group-item-action mb-3 border rounded shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-1"><?= htmlspecialchars($pregunta['title'], ENT_QUOTES) ?></h5>
+                                <small class="text-muted"><?= htmlspecialchars($pregunta['created_at'], ENT_QUOTES) ?></small>
+                            </div>
+                            <p class="mb-2"><?= htmlspecialchars($pregunta['description'], ENT_QUOTES) ?></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Publicado por: <?= htmlspecialchars($pregunta['username'], ENT_QUOTES) ?></small>
+                                <a href="ver_pregunta.php?id=<?= $pregunta['id'] ?>" class="btn btn-sm btn-primary">Responder</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </main>
+        </div>
     </div>
-
 
     <!-- Pie de Página -->
     <footer class="bg-dark text-white text-center py-3 mt-5">

@@ -1,33 +1,44 @@
 <?php
 session_start();
+
+// Inicializar errores como un array vacío
+$errors = [
+    'identifier' => '',
+    'password' => ''
+];
+
+// Validar el formulario si se envió
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Conectar a la base de datos
-    include("../db/conexion.php");
+    $identifier = htmlspecialchars(trim($_POST['identifier']));
+    $password = trim($_POST['password']);
 
-    // Obtener los datos del formulario
-    $identifier = htmlspecialchars(trim($_POST['identifier'])); // Puede ser usuario o correo
-    $password = $_POST['password'];
+    // Validar campos
+    if (empty($identifier)) {
+        $errors['identifier'] = "El campo Usuario o Correo Electrónico es obligatorio.";
+    }
 
-    try {
-        // Consultar por usuario o correo
-        $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ? OR email = ?");
-        $stmt->execute([$identifier, $identifier]);
-        $user = $stmt->fetch();
+    if (empty($password)) {
+        $errors['password'] = "El campo Contraseña es obligatorio.";
+    }
 
-        // Validar contraseña
-        if ($user && password_verify($password, $user['password'])) {
-            // Iniciar sesión
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
+    // Si no hay errores, continuar con la autenticación
+    if (empty(array_filter($errors))) {
+        include('../db/conexion.php');
+        try {
+            $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ? OR email = ?");
+            $stmt->execute([$identifier, $identifier]);
+            $user = $stmt->fetch();
 
-            // Redirigir al inicio
-            header("Location: ../index.php");
-        } else {
-            // Credenciales incorrectas
-            echo "<div class='alert alert-danger text-center'>Usuario o contraseña incorrectos.</div>";
+            if ($user && password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                header("Location: ../index.php");
+                exit;
+            } else {
+                $errors['identifier'] = "Usuario o contraseña incorrectos.";
+            }
+        } catch (PDOException $e) {
+            $errors['identifier'] = "Error del servidor: " . htmlspecialchars($e->getMessage());
         }
-    } catch (PDOException $e) {
-        die("Error en el inicio de sesión: " . $e->getMessage());
     }
 }
-?>

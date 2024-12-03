@@ -70,10 +70,10 @@ $preguntas = obtenerPreguntas($pdo); // Obtener todas las preguntas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./tags.php" class="nav-link">
-                        <i class="bi bi-tags me-2"></i> Tags
-                    </a>
-                </li>
+                            <a href="./mis_respuestas.php" class="nav-link">
+                                <i class="bi bi-tags me-2"></i> Mis Respuestas
+                            </a>
+                        </li>
                 <li class="nav-item">
                     <a href="mis_preguntas.php" class="nav-link">
                         <i class="bi bi-list-task me-2"></i> Mis Preguntas

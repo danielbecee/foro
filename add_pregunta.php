@@ -69,8 +69,8 @@ $userLoggedIn = isset($_SESSION['user_id']); // Verificar si el usuario está au
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./tags.php" class="nav-link">
-                        <i class="bi bi-tags me-2"></i> Tags
+                    <a href="./mis_respuestas.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Mis Respuestas
                     </a>
                 </li>
                 <li class="nav-item">

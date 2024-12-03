@@ -24,6 +24,7 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,8 +33,9 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="./index.php">StackOverflow Clone</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,8 +86,8 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="./tags.php" class="nav-link">
-                        <i class="bi bi-tags me-2"></i> Tags
+                    <a href="./mis_respuestas.php" class="nav-link">
+                        <i class="bi bi-tags me-2"></i> Mis Respuestas
                     </a>
                 </li>
                 <li class="nav-item">
@@ -144,4 +146,5 @@ $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
